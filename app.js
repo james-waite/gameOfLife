@@ -13,7 +13,7 @@ function setup() {
 
   // Create camera
   camera = createCamera();
-  camera.move(0, -250, 150, 0, 0, 0);
+  camera.move(0, -250, 250, 0, 0, 0);
   camera.lookAt(0, 0, 0);
 
   // Create init button
@@ -49,11 +49,6 @@ function draw() {
       if (board[i][j] == 1) {
         graphics.fill(255);
         drawPavement(i, j); // draws a green dot over every 'on' square
-      } else if (board[i][j] == 1 && neighbors > 2) {
-        drawTrichome(i, j); // draws trichome
-        console.log('trichome: ' + i + ', ' + j);
-      } else if (board[i][j] == 0 && neighbors > 3) {
-        drawStomata(i, j);
       } else graphics.fill(0);
       graphics.stroke(0);
       graphics.rect(i * w, j * w, w - 1, w - 1);
@@ -62,7 +57,7 @@ function draw() {
 
   push();
   rotateX(90);
-  tint(255, 50);
+  tint(255, 35);
   texture(graphics);
   noStroke();
   plane(720, 400);
@@ -79,7 +74,7 @@ function windowResized() {
 
 function mouseDragged() {
   // setting up the camera
-  orbitControl(0.3, 0.3, 0.5);
+  orbitControl(0.5, 0.5, 0.8);
 }
 
 function drawPavement(x, y) {
@@ -91,20 +86,20 @@ function drawPavement(x, y) {
   pop();
 }
 
-function drawTrichome() {
+function drawTrichome(i, j) {
   push();
   // drawingContext.shadowBlur = 50;
   // drawingContext.shadowColor = 'green';
   strokeWeight(4);
   stroke('limegreen');
-  point(30, -10, 20);
-  point(35, -18, 15);
-  point(32, -30, 18);
-  point(34, -35, 12);
+  point(30 + i, -10, 20 + j);
+  point(35 + i, -18, 15 + j);
+  point(32 + i, -30, 18 + j);
+  point(34 + i, -35, 12 + j);
   pop();
 }
 
-function drawStomata() {
+function drawStomata(i, j) {
   push();
   strokeWeight(4);
   stroke('limegreen');
@@ -158,6 +153,13 @@ function generate() {
       else if (board[x][y] == 0 && neighbors == 3)
         next[x][y] = 1; // Reproduction
       else next[x][y] = board[x][y]; // Stasis
+
+      // Rules for drawing Trichome or Stomata
+      // if (board[x][y] == 1 && neighbors >= 2) {
+      //   drawTrichome(board[x], board[y]);
+      // } else if (board[x][y] == 0 && neighbors >= 4) {
+      //   drawStomata(board[x], board[y]);
+      // }
     }
   }
 
